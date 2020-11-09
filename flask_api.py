@@ -44,7 +44,7 @@ def nouns():
     string = post_json.get('string')
     blob = TextBlob(string)
     noun_list = []
-    for n in blobl.noun_phrases:
+    for n in blob.noun_phrases:
         noun_list.append(n)
     if string:
         return {'success': True, 'response': noun_list}
