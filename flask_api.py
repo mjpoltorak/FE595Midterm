@@ -32,8 +32,13 @@ def subjectivity():
 def commonwords():
     post_json = flask.request.json
     string = post_json.get('string')
+    token_list = []
+    for w in TextBlob(string).words:
+        token_list.append(w)
+    tokendf = pd.DataFrame(token_list, columns = 'Tokens')
+    mostWords = tokendf['Tokens'].value_counts()[:5]
     if string:
-        return {'success': True, 'response': string}
+        return {'success': True, 'response': mostWords}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
 
@@ -72,8 +77,11 @@ def verbs():
 def pluralize():
     post_json = flask.request.json
     string = post_json.get('string')
+    pluralize = ''
+    for x in TextBlob(string).words:
+        pluralize = pluralize + x.pluralize() + ' '
     if string:
-        return {'success': True, 'response': string}
+        return {'success': True, 'response': pluralize}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
 
@@ -82,8 +90,11 @@ def pluralize():
 def singularize():
     post_json = flask.request.json
     string = post_json.get('string')
+    singularize = ''
+    for x in TextBlob(string).words:
+        singularize = singularize + x.singularize() + ' '
     if string:
-        return {'success': True, 'response': string}
+        return {'success': True, 'response': singularize}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
 
