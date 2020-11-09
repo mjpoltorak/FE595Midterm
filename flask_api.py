@@ -2,6 +2,9 @@ import flask
 import nltk
 from textblob import TextBlob
 from textblob import Word
+import pandas as pd
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from nltk import tokenize
 
 app = flask.Flask(__name__)
 
@@ -10,8 +13,12 @@ app = flask.Flask(__name__)
 def sentiment():
     post_json = flask.request.json
     string = post_json.get('string')
+    #calling vader sentiment 
+    analyzer = SentimentIntensityAnalyzer()
+    #returning the negative, neutral, positive, and neutral scores
+    polarity = analyzer.polarity_scores(string)
     if string:
-        return {'success': True, 'response': string}
+        return {'success': True, 'response': polarity}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
 
@@ -103,8 +110,19 @@ def singularize():
 def sentences():
     post_json = flask.request.json
     string = post_json.get('string')
+    #calling vader sentiment
+    analyzer = SentimentIntensityAnalyzer()
+    #results variable to append the sentences and scores of each sentence
+    results = []
+    #for loop through all the sentences
+    for sentence in tokenize.sent_tokenize(string):
+        #the compound score of each sentence
+        score = analyzer.polarity_scores(sentence)['compound']
+        #appending the sentences and the scores to the results list
+        results.append([sentence.replace('\n',' '),score])
+    df = pd.DataFrame(results, columns = ['Sentence','Score']).sort_values('Score',ascending=False).set_index('Sentence')
     if string:
-        return {'success': True, 'response': string}
+        return {'success': True, 'response': df}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
 
