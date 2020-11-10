@@ -18,6 +18,6 @@
 # Pluralize Endpoint
     To use this endpoint, send a post request containing json in the format {"string": "your string here"}. The API will return the return the plural words associated with each individual token 
 
-# Singularize Endpoing
+# Singularize Endpoint
     To use this endpoint, send a post request containing json in the format {"string": "your string here"}. The API will return all the singular words associated with the indivual tokens in the string
     
