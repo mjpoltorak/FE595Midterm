@@ -54,10 +54,12 @@ def commonwords():
 def nouns():
     post_json = flask.request.json
     string = post_json.get('string')
-    blob = TextBlob(string)
+    words = nltk.word_tokenize(string)
+    tags = nltk.pos_tags(words)
     noun_list = []
-    for n in blob.noun_phrases:
-        noun_list.append(n)
+    for n in tags:
+        if n[1][0:2] == 'NN':
+		noun_list.append(x[0])
     if string:
         return {'success': True, 'response': noun_list}
     else:
