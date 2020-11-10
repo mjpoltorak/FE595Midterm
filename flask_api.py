@@ -13,11 +13,11 @@ app = flask.Flask(__name__)
 def sentiment():
     post_json = flask.request.json
     string = post_json.get('string')
-    #calling vader sentiment 
-    analyzer = SentimentIntensityAnalyzer()
-    #returning the negative, neutral, positive, and neutral scores
-    polarity = analyzer.polarity_scores(string)
     if string:
+        # calling vader sentiment
+        analyzer = SentimentIntensityAnalyzer()
+        # returning the negative, neutral, positive, and neutral scores
+        polarity = analyzer.polarity_scores(string)
         return {'success': True, 'response': polarity}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
@@ -27,9 +27,9 @@ def sentiment():
 def subjectivity():
     post_json = flask.request.json
     string = post_json.get('string')
-    blob = TextBlob(string)
-    sub = blob.sentiment.subjectivity
     if string:
+        blob = TextBlob(string)
+        sub = blob.sentiment.subjectivity
         return {'success': True, 'response': sub}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
@@ -39,13 +39,13 @@ def subjectivity():
 def commonwords():
     post_json = flask.request.json
     string = post_json.get('string')
-    token_list = []
-    for w in TextBlob(string).words:
-        token_list.append(w)
-    tokendf = pd.DataFrame(token_list, columns = 'Tokens')
-    mostWords = tokendf['Tokens'].value_counts()[:5]
     if string:
-        return {'success': True, 'response': mostWords}
+        token_list = []
+        for w in TextBlob(string).words:
+            token_list.append(w)
+        tokendf = pd.DataFrame(token_list, columns=['Tokens'])
+        mostWords = tokendf['Tokens'].value_counts()[:5]
+        return {'success': True, 'response': mostWords.to_dict()}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
 
@@ -54,13 +54,13 @@ def commonwords():
 def nouns():
     post_json = flask.request.json
     string = post_json.get('string')
-    words = nltk.word_tokenize(string)
-    tags = nltk.pos_tags(words)
-    noun_list = []
-    for n in tags:
-        if n[1][0:2] == 'NN':
-		noun_list.append(x[0])
     if string:
+        words = nltk.word_tokenize(string)
+        tags = nltk.pos_tag(words)
+        noun_list = []
+        for n in tags:
+            if n[1][0:2] == 'NN':
+                noun_list.append(n[0])
         return {'success': True, 'response': noun_list}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
@@ -70,13 +70,13 @@ def nouns():
 def verbs():
     post_json = flask.request.json
     string = post_json.get('string')
-    words = nltk.word_tokenize(string)
-    tags = nltk.pos_tag(words)
-    verb_list = []
-    for x in tags:
-        if x[1][0:2] == 'VB':
-            verb_list.append(x[0])
     if string:
+        words = nltk.word_tokenize(string)
+        tags = nltk.pos_tag(words)
+        verb_list = []
+        for x in tags:
+            if x[1][0:2] == 'VB':
+                verb_list.append(x[0])
         return {'success': True, 'response': verb_list}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
@@ -86,10 +86,10 @@ def verbs():
 def pluralize():
     post_json = flask.request.json
     string = post_json.get('string')
-    pluralize = ''
-    for x in TextBlob(string).words:
-        pluralize = pluralize + x.pluralize() + ' '
     if string:
+        pluralize = ''
+        for x in TextBlob(string).words:
+            pluralize = pluralize + x.pluralize() + ' '
         return {'success': True, 'response': pluralize}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
@@ -99,10 +99,10 @@ def pluralize():
 def singularize():
     post_json = flask.request.json
     string = post_json.get('string')
-    singularize = ''
-    for x in TextBlob(string).words:
-        singularize = singularize + x.singularize() + ' '
     if string:
+        singularize = ''
+        for x in TextBlob(string).words:
+            singularize = singularize + x.singularize() + ' '
         return {'success': True, 'response': singularize}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
@@ -112,19 +112,20 @@ def singularize():
 def sentences():
     post_json = flask.request.json
     string = post_json.get('string')
-    #calling vader sentiment
-    analyzer = SentimentIntensityAnalyzer()
-    #results variable to append the sentences and scores of each sentence
-    results = []
-    #for loop through all the sentences
-    for sentence in tokenize.sent_tokenize(string):
-        #the compound score of each sentence
-        score = analyzer.polarity_scores(sentence)['compound']
-        #appending the sentences and the scores to the results list
-        results.append([sentence.replace('\n',' '),score])
-    df = pd.DataFrame(results, columns = ['Sentence','Score']).sort_values('Score',ascending=False).set_index('Sentence')
     if string:
-        return {'success': True, 'response': df}
+        # calling vader sentiment
+        analyzer = SentimentIntensityAnalyzer()
+        # results variable to append the sentences and scores of each sentence
+        results = []
+        # for loop through all the sentences
+        for sentence in tokenize.sent_tokenize(string):
+            # the compound score of each sentence
+            score = analyzer.polarity_scores(sentence)['compound']
+            # appending the sentences and the scores to the results list
+            results.append([sentence.replace('\n', ' '), score])
+        df = pd.DataFrame(results, columns=['Sentence', 'Score']).sort_values('Score', ascending=False).set_index(
+            'Sentence')
+        return {'success': True, 'response': df.to_dict()}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
 
@@ -133,12 +134,12 @@ def sentences():
 def definition():
     post_json = flask.request.json
     string = post_json.get('string')
-    blob = TextBlob(string)
-    words = blob.words
-    ret_val = []
-    for word in words:
-        ret_val.append({word: Word.define(word)})
     if string:
+        blob = TextBlob(string)
+        words = blob.words
+        ret_val = []
+        for word in words:
+            ret_val.append({word: Word.define(word)})
         return {'success': True, 'response': ret_val}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
@@ -148,10 +149,10 @@ def definition():
 def translate():
     post_json = flask.request.json
     string = post_json.get('string')
-    blob = TextBlob(string)
-    translation = blob.translate(to='es')
     if string:
-        return {'success': True, 'response': translation}
+        blob = TextBlob(string)
+        translation = blob.translate(to='es')
+        return {'success': True, 'response': str(translation)}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
 
