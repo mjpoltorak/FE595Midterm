@@ -14,3 +14,6 @@
 #Function singularize(string)
     Takes in a string and will return the singular words associated with each individual token in the string.
     
+#Function translate(string) 
+    Take in a string in English or any other language that is recognized by the Google API system underlying the function and then tranlslates that string to Spanish. 
+    
