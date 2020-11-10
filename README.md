@@ -21,3 +21,6 @@
 # Singularize
     To use this endpoint, sned a post request containing json in the format {"string": "your string here"}. The API will return all the singular words associated with the indivual tokens in the string
     
+#Function translate(string) 
+    Take in a string in English or any other language that is recognized by the Google API system underlying the function and then tranlslates that string to Spanish. 
+    
