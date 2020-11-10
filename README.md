@@ -21,3 +21,5 @@
 # Singularize Endpoint
     To use this endpoint, send a post request containing json in the format {"string": "your string here"}. The API will return all the singular words associated with the indivual tokens in the string
     
+# Translate Endpoint
+    To use this endpoint, send a post request containing json in the format {"string": "your string here"}. The API will return the string, which could be in English or any other recognized language, back in Spanish. 
