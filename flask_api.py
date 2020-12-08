@@ -50,34 +50,24 @@ def commonwords():
         return {'success': False, 'error': 'No string passed in json payload'}, 400
 
 
-@app.route('/nouns', methods=['POST'])
+@app.route('/nounsverbs', methods=['POST'])
 def nouns():
     post_json = flask.request.json
     string = post_json.get('string')
     if string:
         words = nltk.word_tokenize(string)
         tags = nltk.pos_tag(words)
-        noun_list = []
-        for n in tags:
-            if n[1][0:2] == 'NN':
-                noun_list.append(n[0])
-        return {'success': True, 'response': noun_list}
-    else:
-        return {'success': False, 'error': 'No string passed in json payload'}, 400
-
-
-@app.route('/verbs', methods=['POST'])
-def verbs():
-    post_json = flask.request.json
-    string = post_json.get('string')
-    if string:
-        words = nltk.word_tokenize(string)
-        tags = nltk.pos_tag(words)
-        verb_list = []
+	verbs = []
+        nouns = []
+	verb_tag = ['RB','RBR','RBS','VB','VBD',VBG','VBN','VBP','VBZ','WRB']
+	noun_tag = ['NN','NNS','NNP','NNPS','PRP','PRP$','WP','WP$']
         for x in tags:
-            if x[1][0:2] == 'VB':
-                verb_list.append(x[0])
-        return {'success': True, 'response': verb_list}
+            if x[1] in verb_tag:
+                verbs.append(x[0])
+	    if x[1] in noun_tag:
+		nouns.append(x[0])
+	dictionary = {"Nouns":nouns, "Verbs":verbs}
+        return {'success': True, 'response': dictionary}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
 
