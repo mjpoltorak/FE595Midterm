@@ -59,7 +59,7 @@ def nouns():
         tags = nltk.pos_tag(words)
 	verbs = []
         nouns = []
-	verb_tag = ['RB','RBR','RBS','VB','VBD',VBG','VBN','VBP','VBZ','WRB']
+	verb_tag = ['RB','RBR','RBS','VB','VBD','VBG','VBN','VBP','VBZ','WRB']
 	noun_tag = ['NN','NNS','NNP','NNPS','PRP','PRP$','WP','WP$']
         for x in tags:
             if x[1] in verb_tag:
