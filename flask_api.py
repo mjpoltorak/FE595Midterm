@@ -139,13 +139,31 @@ def definition():
 def translate():
     post_json = flask.request.json
     string = post_json.get('string')
-    if string:
-        blob = TextBlob(string)
-        translation = blob.translate(to='es')
-        return {'success': True, 'response': str(translation)}
+    new_string = string.replace('\n',' ')
+        blob = TextBlob(new_string)
+        detection = blob.detect_language()
+        if detection == 'en':
+            spanish = ('Spanish: ' + str(blob.translate(to = 'es')))
+            german = ('German: ' + str(blob.translate(to = 'de')))
+            french = ('French: ' + str(blob.translate(to = 'fr')))
+            chinese = ('Chinese: ' + str(blob.translate(to = 'zh')))
+            arabic = ('Arabic: ' + str(blob.translate(to = 'ar')))
+            Dictionary = {1: spanish, 2: german, 3: french, 4: chinese, 5: arabic}
+            return {'success': True, 'String is already in English': new_string},'Dictionary below: ', Dictionary
+        else:
+            list = ['es','fr','de','zh','ar']
+            for lan in list:
+                detection = blob.detect_language()
+                if list.count(detection) == 1:
+                    lang_det = blob.detect_language()
+                    eng = str(blob.translate(to = 'en'))
+                    return {'success': True,'String is in a listed language': new_string, 'Detected Language': lang_det,'English Translation': eng}
+                else: 
+                    lang_det = blob.detect_language()
+                    eng = str(blob.translate(to = 'en'))
+                    return {'success': True,'String is in a non-listed language': new_string, 'Detected Language': lang_det,'English Translation': eng}
     else:
         return {'success': False, 'error': 'No string passed in json payload'}, 400
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
