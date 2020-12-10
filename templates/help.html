@@ -1,0 +1,11 @@
+<html lang="">
+    <b>API Use Instructions</b>
+    <br><br>
+    All of our functions are accessed through the "/process_string" endpoint. The endpoint accepts only a POST request,
+    with required parameters "string" and "method". String which takes a string and method which takes a list of strings
+    representing functions to run on the passed string. The format of this must be valid JSON. See the below image for
+    an example of how to use Postman to send a post request and what the format is for valid JSON.
+    <!--https://stackoverflow.com/questions/42731376/flask-web-page-cannot-find-image-file-->
+    <br><br>
+    <img src="{{url_for('static', filename='Postman.png')}}" alt="Not working" height="750px" width=1120px">
+</html>
