@@ -12,11 +12,13 @@ app = flask.Flask(__name__)
 
 def sentiment(string):
     try:
-        # calling vader sentiment
-        analyzer = SentimentIntensityAnalyzer()
-        # returning the negative, neutral, positive, and neutral scores
-        polarity = analyzer.polarity_scores(string)
-        return polarity
+        results = [] #list to add vader, TextBlob NLP
+        analyzer = SentimentIntensityAnalyzer() #calling vader sentiment
+        blob = TextBlob(string) #calling TextBlob
+        polarity,subj = f'Polarity: {blob.sentiment[0]}',f'Subjectivity: {blob.sentiment[1]}' #textblob subjectivity and polarity
+        scores = analyzer.polarity_scores(string) #returning the negative, neutral, positive, and neutral scores
+        results.append([scores, polarity, subj]) 
+        return results
     except:
         return 'Error occurred calculating sentiment'
 
@@ -82,20 +84,17 @@ def singularize(string):
 
 
 def sentences(string):
-    try:
-        # calling vader sentiment
-        analyzer = SentimentIntensityAnalyzer()
-        # results variable to append the sentences and scores of each sentence
-        results = []
-        # for loop through all the sentences
-        for sentence in tokenize.sent_tokenize(string):
-            # the compound score of each sentence
-            score = analyzer.polarity_scores(sentence)['compound']
-            # appending the sentences and the scores to the results list
-            results.append([sentence.replace('\n', ' '), score])
-        df = pd.DataFrame(results, columns=['Sentence', 'Score']).sort_values('Score', ascending=False).set_index(
+    try: #try clause
+        analyzer = SentimentIntensityAnalyzer() #calling vader sentiment
+        results = [] #results variable to append the sentences and scores of each sentence
+        for sentence in tokenize.sent_tokenize(string): #for loop through all the sentences
+            score = analyzer.polarity_scores(sentence)['compound'] #the compound score of each sentence
+            blob = TextBlob(sentence) #textblob to check for other NLP like polarity and subjectivity
+            polarity,subj = blob.sentiment[0],blob.sentiment[1] #variables for polarity and subjectivity 
+            results.append([sentence.replace('\n', ' '), score, polarity, subj]) #appending the sentences and the scores to the results list
+        df = pd.DataFrame(results, columns=['Sentence', 'Score','Polarity','Subjectivity']).sort_values('Score', ascending=False).set_index(
             'Sentence')
-        return df.to_dict()
+        return df.to_dict() #dictionary to run properly with Flask
     except:
         return 'Error occurred finding sentences'
 
