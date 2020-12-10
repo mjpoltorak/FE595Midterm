@@ -15,7 +15,7 @@
 
 
 # Sentiment Function
-    The function will return json formatted results with the negative, neutral, positive, and compound sentiment scores.
+    The function will return json formatted results with the negative, neutral, positive, and compound sentiment scores, as well as if the sentence is positive or negative overall.
 
 # Definition Function 
     The function will return json formatted results with defitions for each word in the string passed to it.
@@ -43,5 +43,5 @@
     The function will return the string, which could be in English or any other recognized language, back in Spanish. 
 
 # Sentences Function
-    The function will return all the sentences in a pandas dataframe ranked from the highest compound sentiment score to the least compound sentiment score of each sentence. 
+    The function will return all the sentences in a pandas dataframe ranked from the highest compound sentiment score to the least compound sentiment score, as well as if the sentence is positive or negative overall. 
 
