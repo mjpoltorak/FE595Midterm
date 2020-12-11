@@ -20,15 +20,13 @@ def sentiment(string):
     except:
         return 'Error occurred calculating sentiment'
 
-
 def subjectivity(string):
     try:
-        blob = TextBlob(string)
-        sub = blob.sentiment.subjectivity
-        return sub
+        blob = TextBlob(string) #calling textblob
+        pol,sub = f'Polarity: {blob.sentiment[0]}',f'Subjectivity: {blob.sentiment[1]}' #textblob subjectivity and polarity
+        return pol,sub #return both polarity and subjectivity
     except:
         return 'Error occurred calculating subjectivity'
-
 
 def commonwords(string):
     try:
