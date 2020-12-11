@@ -14,10 +14,8 @@ def sentiment(string):
     try:
         results = [] #list to add vader, TextBlob NLP
         analyzer = SentimentIntensityAnalyzer() #calling vader sentiment
-        blob = TextBlob(string) #calling TextBlob
-        polarity,subj = f'Polarity: {blob.sentiment[0]}',f'Subjectivity: {blob.sentiment[1]}' #textblob subjectivity and polarity
         scores = analyzer.polarity_scores(string) #returning the negative, neutral, positive, and neutral scores
-        results.append([scores, polarity, subj]) 
+        results.append([scores]) 
         return results
     except:
         return 'Error occurred calculating sentiment'
@@ -82,19 +80,20 @@ def singularize(string):
     except:
         return 'Error occurred calculating singularizing'
 
-
+   
 def sentences(string):
-    try: #try clause
-        analyzer = SentimentIntensityAnalyzer() #calling vader sentiment
-        results = [] #results variable to append the sentences and scores of each sentence
-        for sentence in tokenize.sent_tokenize(string): #for loop through all the sentences
-            score = analyzer.polarity_scores(sentence)['compound'] #the compound score of each sentence
-            blob = TextBlob(sentence) #textblob to check for other NLP like polarity and subjectivity
-            polarity,subj = blob.sentiment[0],blob.sentiment[1] #variables for polarity and subjectivity 
-            results.append([sentence.replace('\n', ' '), score, polarity, subj]) #appending the sentences and the scores to the results list
-        df = pd.DataFrame(results, columns=['Sentence', 'Score','Polarity','Subjectivity']).sort_values('Score', ascending=False).set_index(
+    try: 
+        analyzer = SentimentIntensityAnalyzer() # calling vader sentiment
+        results = [] #empty list to add scores
+        for sentence in tokenize.sent_tokenize(string): # for loop through all the sentences
+            compound = analyzer.polarity_scores(sentence)['compound']
+            pos = analyzer.polarity_scores(sentence)['pos']
+            neg = analyzer.polarity_scores(sentence)['neg']
+            neu = analyzer.polarity_scores(sentence)['neu']
+            results.append([sentence.replace('\n', ' '), compound, pos, neg, neu]) # appending the sentences and the scores to the results list
+        df = pd.DataFrame(results, columns=['Sentence', 'Compound','Positive','Negative','Neutral']).sort_values('Compound', ascending=False).set_index(
             'Sentence')
-        return df.to_dict() #dictionary to run properly with Flask
+        return df.to_dict() #need dictionary for flask
     except:
         return 'Error occurred finding sentences'
 
