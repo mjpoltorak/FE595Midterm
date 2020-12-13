@@ -11,23 +11,21 @@ app = flask.Flask(__name__)
 
 def sentiment(string):
     try:
-        # calling vader sentiment
-        analyzer = SentimentIntensityAnalyzer()
-        # returning the negative, neutral, positive, and neutral scores
-        polarity = analyzer.polarity_scores(string)
-        return polarity
+        results = [] #list to add vader, TextBlob NLP
+        analyzer = SentimentIntensityAnalyzer() #calling vader sentiment
+        scores = analyzer.polarity_scores(string) #returning the negative, neutral, positive, and neutral scores
+        results.append([scores]) 
+        return results
     except:
         return 'Error occurred calculating sentiment'
 
-
 def subjectivity(string):
     try:
-        blob = TextBlob(string)
-        sub = blob.sentiment.subjectivity
-        return sub
+        blob = TextBlob(string) #calling textblob
+        pol,sub = f'Polarity: {blob.sentiment[0]}',f'Subjectivity: {blob.sentiment[1]}' #textblob subjectivity and polarity
+        return pol,sub #return both polarity and subjectivity
     except:
         return 'Error occurred calculating subjectivity'
-
 
 def commonwords(string):
     try:
@@ -79,22 +77,20 @@ def singularize(string):
     except:
         return 'Error occurred calculating singularizing'
 
-
+   
 def sentences(string):
-    try:
-        # calling vader sentiment
-        analyzer = SentimentIntensityAnalyzer()
-        # results variable to append the sentences and scores of each sentence
-        results = []
-        # for loop through all the sentences
-        for sentence in tokenize.sent_tokenize(string):
-            # the compound score of each sentence
-            score = analyzer.polarity_scores(sentence)['compound']
-            # appending the sentences and the scores to the results list
-            results.append([sentence.replace('\n', ' '), score])
-        df = pd.DataFrame(results, columns=['Sentence', 'Score']).sort_values('Score', ascending=False).set_index(
+    try: 
+        analyzer = SentimentIntensityAnalyzer() # calling vader sentiment
+        results = [] #empty list to add scores
+        for sentence in tokenize.sent_tokenize(string): # for loop through all the sentences
+            compound = analyzer.polarity_scores(sentence)['compound']
+            pos = analyzer.polarity_scores(sentence)['pos']
+            neg = analyzer.polarity_scores(sentence)['neg']
+            neu = analyzer.polarity_scores(sentence)['neu']
+            results.append([sentence.replace('\n', ' '), compound, pos, neg, neu]) # appending the sentences and the scores to the results list
+        df = pd.DataFrame(results, columns=['Sentence', 'Compound','Positive','Negative','Neutral']).sort_values('Compound', ascending=False).set_index(
             'Sentence')
-        return df.to_dict()
+        return df.to_dict() #need dictionary for flask
     except:
         return 'Error occurred finding sentences'
 
