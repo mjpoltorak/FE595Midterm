@@ -14,34 +14,31 @@
     The help endpoint (a GET) explains how to use the API and how to send a post request with valid JSON
 
 
-# Sentiment Function
+# Sentiment Function ("sentiment" must be in the methods list)
     The function will return json formatted results with the negative, neutral, positive, and compound sentiment scores.
 
-# Definition Function 
+# Definition Function ("definition" must be in the methods list)
     The function will return json formatted results with defitions for each word in the string passed to it.
     
-# Subjectivity Function 
+# Subjectivity Function ("subjectivity" must be in the methods list)
     The function will return a subjectivity score of the string with 0 being very objective, and 1 being very subjective
 
-# Noun Function 
-    The function will return all the nouns that are a part of the string
-
-# Verbs Function 
-    The function will return all instances of verbs (past, present, gerund etc) from the string
+# Noun & Verbs Function ("nounsverbs" must be in the methods list)
+    The function will return all the nouns and verbs (past, present, gerund etc) that are a part of the string
     
-# Commonwords Function 
+# Commonwords Function ("commonwords" must be in the methods list)
     The function will return a dataframe of the 5 most common words using value_counts
 
-# Pluralize Function 
+# Pluralize Function ("pluralize" must be in the methods list)
     The function will return the return the plural words associated with each individual token 
 
-# Singularize Function
+# Singularize Function ("singularize" must be in the methods list)
     The function will return all the singular words associated with the individual tokens in the string
     
 
-# Translate Function 
+# Translate Function ("translate" must be in the methods list)
     The function will return the string, which could be in English or any other recognized language, back in Spanish. 
 
-# Sentences Function
+# Sentences Function("sentences" must be in the methods list)
     The function will return all the sentences in a pandas dataframe ranked from the highest compound sentiment score to the least compound sentiment score of each sentence. 
 

@@ -5,7 +5,6 @@ from textblob import Word
 import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from nltk import tokenize
-import os
 
 app = flask.Flask(__name__)
 
